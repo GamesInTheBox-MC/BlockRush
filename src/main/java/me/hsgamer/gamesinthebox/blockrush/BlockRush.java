@@ -1,30 +1,47 @@
 package me.hsgamer.gamesinthebox.blockrush;
 
-import me.hsgamer.gamesinthebox.expansion.SingleGameExpansion;
-import me.hsgamer.gamesinthebox.expansion.extra.Reloadable;
-import me.hsgamer.gamesinthebox.game.Game;
+import me.hsgamer.gamesinthebox.game.template.TemplateGame;
+import me.hsgamer.gamesinthebox.game.template.TemplateGameArena;
+import me.hsgamer.gamesinthebox.game.template.TemplateGameArenaLogic;
+import me.hsgamer.gamesinthebox.game.template.TemplateGameEditor;
+import me.hsgamer.gamesinthebox.game.template.expansion.TemplateGameExpansion;
 import me.hsgamer.hscore.bukkit.config.BukkitConfig;
+import me.hsgamer.hscore.common.CollectionUtils;
 import me.hsgamer.hscore.config.proxy.ConfigGenerator;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.List;
+import java.util.Optional;
 
-public class BlockRush extends SingleGameExpansion implements Reloadable {
-    private final BlockRushMainConfig mainConfig = ConfigGenerator.newInstance(BlockRushMainConfig.class, new BukkitConfig(new File(getDataFolder(), "config.yml")));
+public class BlockRush extends TemplateGameExpansion {
     private final BlockRushMessageConfig messageConfig = ConfigGenerator.newInstance(BlockRushMessageConfig.class, new BukkitConfig(new File(getDataFolder(), "messages.yml")));
 
     @Override
-    protected @NotNull Game getGame() {
-        return new BlockRushGame(this);
+    public TemplateGameArenaLogic createArenaLogic(TemplateGameArena arena) {
+        return new BlockRushArenaLogic(arena);
+    }
+
+    @Override
+    public TemplateGameEditor getEditor(TemplateGame game) {
+        return new BlockRushEditor(game);
+    }
+
+    @Override
+    public String getDisplayName() {
+        return messageConfig.getDisplayName();
+    }
+
+    @Override
+    public List<String> getDefaultHologramLines(String name) {
+        return Optional.ofNullable(messageConfig.getDefaultHologramLines().get(name))
+                .map(CollectionUtils::createStringListFromObject)
+                .orElseGet(() -> super.getDefaultHologramLines(name));
     }
 
     @Override
     protected @NotNull String @NotNull [] getGameType() {
         return new String[]{"block-rush", "rush"};
-    }
-
-    public BlockRushMainConfig getMainConfig() {
-        return mainConfig;
     }
 
     public BlockRushMessageConfig getMessageConfig() {
@@ -33,7 +50,7 @@ public class BlockRush extends SingleGameExpansion implements Reloadable {
 
     @Override
     public void onReload() {
-        mainConfig.reloadConfig();
+        super.onReload();
         messageConfig.reloadConfig();
     }
 }

@@ -13,11 +13,6 @@ public interface BlockRushMessageConfig {
         return "Block Rush";
     }
 
-    @ConfigPath("point")
-    default String getPoint() {
-        return "&a+{point} point(s) &7({total})";
-    }
-
     @ConfigPath("default-hologram-lines")
     default Map<String, Object> getDefaultHologramLines() {
         Map<String, Object> map = new LinkedHashMap<>();
@@ -40,41 +35,6 @@ public interface BlockRushMessageConfig {
                 "&fTime left: &a{game_time_left}"
         ));
         return map;
-    }
-
-    @ConfigPath("state.waiting")
-    default String getStateWaiting() {
-        return "Waiting";
-    }
-
-    @ConfigPath("state.in-game")
-    default String getStateInGame() {
-        return "In Game";
-    }
-
-    @ConfigPath("state.ending")
-    default String getStateEnding() {
-        return "Ending";
-    }
-
-    @ConfigPath("state.idle")
-    default String getStateIdle() {
-        return "Idle";
-    }
-
-    @ConfigPath("start-broadcast")
-    default String getStartBroadcast() {
-        return "&aThe game has started!";
-    }
-
-    @ConfigPath("end-broadcast")
-    default String getEndBroadcast() {
-        return "&aThe game has ended!";
-    }
-
-    @ConfigPath("not-enough-player-to-reward")
-    default String getNotEnoughPlayerToReward() {
-        return "&cThere are not enough players to reward";
     }
 
     void reloadConfig();
