@@ -1,9 +1,11 @@
 package me.hsgamer.gamesinthebox.blockrush;
 
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameArena;
+import me.hsgamer.gamesinthebox.game.simple.feature.SimpleBoundingFeature;
 import me.hsgamer.gamesinthebox.planner.Planner;
 import me.hsgamer.gamesinthebox.util.ActionBarUtil;
 import me.hsgamer.hscore.common.CollectionUtils;
+import me.hsgamer.minigamecore.base.Feature;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -26,6 +28,13 @@ public class BlockRushArena extends SimpleGameArena {
     @Override
     public void end() {
 
+    }
+
+    @Override
+    protected List<Feature> loadFeatures() {
+        List<Feature> features = super.loadFeatures();
+        features.add(new SimpleBoundingFeature(this, false));
+        return features;
     }
 
     @Override
