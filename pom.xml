@@ -18,6 +18,6 @@
     <description>An Example expansion for GamesInTheBox</description>
 
     <properties>
-        <project.mainClass>me.hsgamer.gamesinthebox.exampleexpansion.ExampleExpansion</project.mainClass>
+        <project.mainClass>me.hsgamer.gamesinthebox.blockrush.BlockRush</project.mainClass>
     </properties>
 </project>

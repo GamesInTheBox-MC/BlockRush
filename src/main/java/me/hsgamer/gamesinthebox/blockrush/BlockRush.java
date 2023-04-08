@@ -1,8 +1,8 @@
-package me.hsgamer.gamesinthebox.exampleexpansion;
+package me.hsgamer.gamesinthebox.blockrush;
 
 import me.hsgamer.hscore.expansion.common.Expansion;
 
-public class ExampleExpansion implements Expansion {
+public class BlockRush implements Expansion {
     @Override
     public boolean onLoad() {
         return true;
