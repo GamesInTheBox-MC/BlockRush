@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public class BlockRushEditor extends TemplateGameEditor {
-    private final SimpleBoundingFeature.Editor boundingFeatureEditor = SimpleBoundingFeature.editor();
+    private final SimpleBoundingFeature.Editor boundingFeatureEditor = SimpleBoundingFeature.editor(true);
 
     public BlockRushEditor(@NotNull TemplateGame game) {
         super(game);
