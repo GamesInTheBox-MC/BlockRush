@@ -21,7 +21,7 @@ public interface BlockRushMessageConfig {
                 "&fYou will mine blocks to get points"
         ));
         map.put("points", Collections.singletonList(
-                "&fPoints when you mine the block: &a{game_point_plus}"
+                "&fPoints when you mine the block: &a{game_point_block}"
         ));
         map.put("top", Arrays.asList(
                 "&a#1 &f{game_top_name_1} &7- &f{game_top_value_1}",

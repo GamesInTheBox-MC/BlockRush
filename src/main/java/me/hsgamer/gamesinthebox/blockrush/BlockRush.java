@@ -1,5 +1,6 @@
 package me.hsgamer.gamesinthebox.blockrush;
 
+import me.hsgamer.gamesinthebox.game.simple.feature.SimplePointFeature;
 import me.hsgamer.gamesinthebox.game.template.TemplateGame;
 import me.hsgamer.gamesinthebox.game.template.TemplateGameArena;
 import me.hsgamer.gamesinthebox.game.template.TemplateGameArenaLogic;
@@ -11,10 +12,13 @@ import me.hsgamer.hscore.config.proxy.ConfigGenerator;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 public class BlockRush extends TemplateGameExpansion {
+    public static final SimplePointFeature.PointValue POINT_BLOCK = new SimplePointFeature.PointValue("block", 1, false);
+
     private final BlockRushMessageConfig messageConfig = ConfigGenerator.newInstance(BlockRushMessageConfig.class, new BukkitConfig(new File(getDataFolder(), "messages.yml")));
 
     @Override
@@ -25,6 +29,11 @@ public class BlockRush extends TemplateGameExpansion {
     @Override
     public TemplateGameEditor getEditor(TemplateGame game) {
         return new BlockRushEditor(game);
+    }
+
+    @Override
+    public List<SimplePointFeature.PointValue> getPointValues() {
+        return Collections.singletonList(POINT_BLOCK);
     }
 
     @Override
