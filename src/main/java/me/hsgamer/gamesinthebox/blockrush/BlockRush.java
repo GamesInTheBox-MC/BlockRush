@@ -23,7 +23,7 @@ public class BlockRush extends TemplateGameExpansion {
 
     @Override
     public TemplateGameArenaLogic createArenaLogic(TemplateGameArena arena) {
-        return new BlockRushArenaLogic(arena);
+        return new BlockRushArenaLogic(this, arena);
     }
 
     @Override
