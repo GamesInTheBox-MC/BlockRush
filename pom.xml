@@ -10,12 +10,12 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>example-expansion</artifactId>
+    <artifactId>block-rush</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>ExampleExpansion</name>
-    <description>An Example expansion for GamesInTheBox</description>
+    <name>BlockRush</name>
+    <description>Be a miner</description>
 
     <properties>
         <project.mainClass>me.hsgamer.gamesinthebox.blockrush.BlockRush</project.mainClass>
