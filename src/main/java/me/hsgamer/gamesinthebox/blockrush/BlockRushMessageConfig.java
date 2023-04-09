@@ -37,10 +37,5 @@ public interface BlockRushMessageConfig {
         return map;
     }
 
-    @ConfigPath("not-enough-player-to-reward")
-    default String getNotEnoughPlayerToReward() {
-        return "&cThere are not enough players to reward";
-    }
-
     void reloadConfig();
 }

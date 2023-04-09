@@ -7,10 +7,7 @@ import me.hsgamer.gamesinthebox.game.simple.feature.SimpleBoundingFeature;
 import me.hsgamer.gamesinthebox.game.simple.feature.SimpleRewardFeature;
 import me.hsgamer.gamesinthebox.game.template.TemplateGameArena;
 import me.hsgamer.gamesinthebox.game.template.TemplateGameArenaLogic;
-import me.hsgamer.gamesinthebox.planner.feature.VariableFeature;
-import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.minigamecore.base.Feature;
-import org.bukkit.Bukkit;
 
 import java.util.Arrays;
 import java.util.List;
@@ -53,10 +50,7 @@ public class BlockRushArenaLogic extends TemplateGameArenaLogic {
     @Override
     public void onEndingStart() {
         List<UUID> topList = arena.getFeature(PointFeature.class).getTopUUID();
-        if (!arena.getFeature(SimpleRewardFeature.class).tryReward(topList)) {
-            String notEnoughPlayerMessage = arena.getFeature(VariableFeature.class).replace(expansion.getMessageConfig().getNotEnoughPlayerToReward());
-            Bukkit.getOnlinePlayers().forEach(player -> MessageUtils.sendMessage(player, notEnoughPlayerMessage));
-        }
+        arena.getFeature(SimpleRewardFeature.class).tryReward(topList);
 
         arena.getFeature(MaterialFeature.class).clearBlock();
     }
