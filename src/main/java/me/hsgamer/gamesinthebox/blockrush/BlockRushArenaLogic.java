@@ -12,6 +12,7 @@ import me.hsgamer.minigamecore.base.Feature;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class BlockRushArenaLogic extends TemplateGameArenaLogic {
     private final BlockRush expansion;
@@ -49,7 +50,7 @@ public class BlockRushArenaLogic extends TemplateGameArenaLogic {
 
     @Override
     public void onEndingStart() {
-        List<UUID> topList = arena.getFeature(PointFeature.class).getTopUUID();
+        List<UUID> topList = arena.getFeature(PointFeature.class).getTopUUID().collect(Collectors.toList());
         arena.getFeature(SimpleRewardFeature.class).tryReward(topList);
 
         arena.getFeature(MaterialFeature.class).clearBlock();
