@@ -25,7 +25,7 @@ public class BlockRushArenaLogic extends TemplateGameArenaLogic {
     @Override
     public List<Feature> loadFeatures() {
         return Arrays.asList(
-                new SimpleBoundingFeature(arena, false),
+                new SimpleBoundingFeature(arena),
                 new MaterialFeature(arena),
                 new ListenerFeature(expansion, arena, this)
         );

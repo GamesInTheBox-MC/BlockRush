@@ -58,7 +58,7 @@ public class ListenerFeature implements Feature, Listener {
         Block block = event.getBlock();
         Location location = block.getLocation();
 
-        if (!getBoundingFeature().checkBounding(location))
+        if (!getBoundingFeature().checkBounding(location, true))
             return;
         if (logic.isInGame()) {
             getPointFeature().applyPoint(event.getPlayer().getUniqueId(), BlockRush.POINT_BLOCK);
@@ -71,7 +71,7 @@ public class ListenerFeature implements Feature, Listener {
     public void onBlocExplode(BlockExplodeEvent event) {
         if (!logic.isInGame()) {
             BoundingFeature boundingFeature = getBoundingFeature();
-            event.blockList().removeIf(block -> boundingFeature.checkBounding(block.getLocation()));
+            event.blockList().removeIf(block -> boundingFeature.checkBounding(block.getLocation(), true));
         }
     }
 
@@ -79,14 +79,14 @@ public class ListenerFeature implements Feature, Listener {
     public void onEntityExplode(EntityExplodeEvent event) {
         BoundingFeature boundingFeature = getBoundingFeature();
         if (!logic.isInGame()) {
-            event.blockList().removeIf(block -> boundingFeature.checkBounding(block.getLocation()));
+            event.blockList().removeIf(block -> boundingFeature.checkBounding(block.getLocation(), true));
             return;
         }
         Entity entity = event.getEntity();
         if (entity.getWorld() != boundingFeature.getWorld())
             return;
         Entity source = EntityUtil.getTntSource(entity);
-        int count = (int) event.blockList().stream().filter(block -> !XTag.AIR.isTagged(XMaterial.matchXMaterial(block.getType())) && boundingFeature.checkBounding(block.getLocation())).count();
+        int count = (int) event.blockList().stream().filter(block -> !XTag.AIR.isTagged(XMaterial.matchXMaterial(block.getType())) && boundingFeature.checkBounding(block.getLocation(), true)).count();
         if (count > 0 && source instanceof org.bukkit.entity.Player)
             getPointFeature().applyPoint(source.getUniqueId(), BlockRush.POINT_BLOCK, point -> point * count);
     }
