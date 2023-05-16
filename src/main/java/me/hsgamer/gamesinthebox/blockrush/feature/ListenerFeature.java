@@ -12,6 +12,7 @@ import me.hsgamer.minigamecore.base.Feature;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -19,6 +20,8 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
+import org.bukkit.event.block.BlockMultiPlaceEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
 public class ListenerFeature implements Feature, Listener {
@@ -68,7 +71,25 @@ public class ListenerFeature implements Feature, Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onBlocExplode(BlockExplodeEvent event) {
+    public void onPlace(BlockPlaceEvent event) {
+        Block block = event.getBlock();
+        Location location = block.getLocation();
+
+        if (getBoundingFeature().checkBounding(location, true))
+            event.setCancelled(true);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onMultiPlace(BlockMultiPlaceEvent event) {
+        boolean isInBound = event.getReplacedBlockStates().stream()
+                .map(BlockState::getLocation)
+                .anyMatch(location -> getBoundingFeature().checkBounding(location, true));
+        if (isInBound)
+            event.setCancelled(true);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onBlockExplode(BlockExplodeEvent event) {
         if (!logic.isInGame()) {
             BoundingFeature boundingFeature = getBoundingFeature();
             event.blockList().removeIf(block -> boundingFeature.checkBounding(block.getLocation(), true));
