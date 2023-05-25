@@ -12,12 +12,12 @@ import org.bukkit.World;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class MaterialFeature implements Feature {
+public class BlockPlaceFeature implements Feature {
     private final AtomicReference<BlockProcess> currentTask = new AtomicReference<>();
     private final AtomicBoolean hasBlock = new AtomicBoolean(false);
     private final SimpleGameArena arena;
 
-    public MaterialFeature(SimpleGameArena arena) {
+    public BlockPlaceFeature(SimpleGameArena arena) {
         this.arena = arena;
     }
 

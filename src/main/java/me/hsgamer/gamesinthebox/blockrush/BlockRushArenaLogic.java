@@ -1,7 +1,7 @@
 package me.hsgamer.gamesinthebox.blockrush;
 
 import me.hsgamer.gamesinthebox.blockrush.feature.ListenerFeature;
-import me.hsgamer.gamesinthebox.blockrush.feature.MaterialFeature;
+import me.hsgamer.gamesinthebox.blockrush.feature.BlockPlaceFeature;
 import me.hsgamer.gamesinthebox.game.feature.PointFeature;
 import me.hsgamer.gamesinthebox.game.simple.feature.SimpleBoundingFeature;
 import me.hsgamer.gamesinthebox.game.simple.feature.SimpleMaterialProbabilityFeature;
@@ -28,26 +28,26 @@ public class BlockRushArenaLogic extends TemplateGameArenaLogic {
         return Arrays.asList(
                 new SimpleBoundingFeature(arena),
                 new SimpleMaterialProbabilityFeature(arena),
-                new MaterialFeature(arena),
+                new BlockPlaceFeature(arena),
                 new ListenerFeature(expansion, arena, this)
         );
     }
 
     @Override
     public void forceEnd() {
-        arena.getFeature(MaterialFeature.class).clearBlockFast();
+        arena.getFeature(BlockPlaceFeature.class).clearBlockFast();
         arena.getFeature(ListenerFeature.class).unregister();
     }
 
     @Override
     public void onWaitingStart() {
         arena.getFeature(ListenerFeature.class).register();
-        arena.getFeature(MaterialFeature.class).setBlock();
+        arena.getFeature(BlockPlaceFeature.class).setBlock();
     }
 
     @Override
     public boolean isWaitingOver() {
-        return super.isWaitingOver() && arena.getFeature(MaterialFeature.class).isFinished();
+        return super.isWaitingOver() && arena.getFeature(BlockPlaceFeature.class).isFinished();
     }
 
     @Override
@@ -55,12 +55,12 @@ public class BlockRushArenaLogic extends TemplateGameArenaLogic {
         List<UUID> topList = arena.getFeature(PointFeature.class).getTopUUID().collect(Collectors.toList());
         arena.getFeature(SimpleRewardFeature.class).tryReward(topList);
 
-        arena.getFeature(MaterialFeature.class).clearBlock();
+        arena.getFeature(BlockPlaceFeature.class).clearBlock();
     }
 
     @Override
     public boolean isEndingOver() {
-        return super.isEndingOver() && arena.getFeature(MaterialFeature.class).isFinished();
+        return super.isEndingOver() && arena.getFeature(BlockPlaceFeature.class).isFinished();
     }
 
     @Override
