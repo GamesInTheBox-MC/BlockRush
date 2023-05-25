@@ -4,6 +4,7 @@ import me.hsgamer.gamesinthebox.blockrush.feature.ListenerFeature;
 import me.hsgamer.gamesinthebox.blockrush.feature.MaterialFeature;
 import me.hsgamer.gamesinthebox.game.feature.PointFeature;
 import me.hsgamer.gamesinthebox.game.simple.feature.SimpleBoundingFeature;
+import me.hsgamer.gamesinthebox.game.simple.feature.SimpleMaterialProbabilityFeature;
 import me.hsgamer.gamesinthebox.game.simple.feature.SimpleRewardFeature;
 import me.hsgamer.gamesinthebox.game.template.TemplateGameArena;
 import me.hsgamer.gamesinthebox.game.template.TemplateGameArenaLogic;
@@ -26,6 +27,7 @@ public class BlockRushArenaLogic extends TemplateGameArenaLogic {
     public List<Feature> loadFeatures() {
         return Arrays.asList(
                 new SimpleBoundingFeature(arena),
+                new SimpleMaterialProbabilityFeature(arena),
                 new MaterialFeature(arena),
                 new ListenerFeature(expansion, arena, this)
         );
