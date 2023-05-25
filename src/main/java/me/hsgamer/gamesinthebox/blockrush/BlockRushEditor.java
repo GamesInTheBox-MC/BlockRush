@@ -1,20 +1,22 @@
 package me.hsgamer.gamesinthebox.blockrush;
 
+import me.hsgamer.gamesinthebox.blockrush.feature.ListenerFeature;
 import me.hsgamer.gamesinthebox.game.GameArena;
+import me.hsgamer.gamesinthebox.game.simple.action.ValueAction;
 import me.hsgamer.gamesinthebox.game.simple.feature.SimpleBoundingFeature;
 import me.hsgamer.gamesinthebox.game.simple.feature.SimpleMaterialProbabilityFeature;
 import me.hsgamer.gamesinthebox.game.template.TemplateGame;
 import me.hsgamer.gamesinthebox.game.template.TemplateGameEditor;
+import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class BlockRushEditor extends TemplateGameEditor {
     private final SimpleBoundingFeature.Editor boundingFeatureEditor = SimpleBoundingFeature.editor(true);
     private final SimpleMaterialProbabilityFeature.Editor materialProbabilityFeatureEditor = SimpleMaterialProbabilityFeature.editor();
+    private Boolean dropItemOnBreak;
 
     public BlockRushEditor(@NotNull TemplateGame game) {
         super(game);
@@ -25,6 +27,38 @@ public class BlockRushEditor extends TemplateGameEditor {
         Map<String, SimpleAction> map = super.createActionMap();
         map.putAll(boundingFeatureEditor.getActions());
         map.putAll(materialProbabilityFeatureEditor.getActions());
+        map.put("drop-item-on-break", new ValueAction<Boolean>() {
+            @Override
+            protected boolean performAction(@NotNull CommandSender sender, @NotNull Boolean value, String... args) {
+                dropItemOnBreak = value;
+                return true;
+            }
+
+            @Override
+            protected int getValueArgCount() {
+                return 1;
+            }
+
+            @Override
+            protected Optional<Boolean> parseValue(@NotNull CommandSender sender, String... args) {
+                return Optional.of(Boolean.parseBoolean(args[0]));
+            }
+
+            @Override
+            protected @NotNull List<String> getValueArgs(@NotNull CommandSender sender, String... args) {
+                return Arrays.asList("true", "false");
+            }
+
+            @Override
+            public @NotNull String getDescription() {
+                return "Set whether to drop items when breaking blocks";
+            }
+
+            @Override
+            public @NotNull String getArgsUsage() {
+                return "<true/false>";
+            }
+        });
         return map;
     }
 
@@ -33,6 +67,31 @@ public class BlockRushEditor extends TemplateGameEditor {
         List<SimpleEditorStatus> list = super.createEditorStatusList();
         list.add(boundingFeatureEditor.getStatus());
         list.add(materialProbabilityFeatureEditor.getStatus());
+        list.add(new SimpleEditorStatus() {
+            @Override
+            public void sendStatus(@NotNull CommandSender commandSender) {
+                MessageUtils.sendMessage(commandSender, "&6&lBlock Rush");
+                MessageUtils.sendMessage(commandSender, "&eDrop item on break: &f" + (dropItemOnBreak == null ? "Default" : dropItemOnBreak));
+            }
+
+            @Override
+            public void reset(@NotNull CommandSender commandSender) {
+                dropItemOnBreak = null;
+            }
+
+            @Override
+            public boolean canSave(@NotNull CommandSender commandSender) {
+                return true;
+            }
+
+            @Override
+            public Map<String, Object> toPathValueMap(@NotNull CommandSender commandSender) {
+                if (dropItemOnBreak != null) {
+                    return Collections.singletonMap("drop-item-on-break", dropItemOnBreak);
+                }
+                return Collections.emptyMap();
+            }
+        });
         return list;
     }
 
@@ -40,6 +99,7 @@ public class BlockRushEditor extends TemplateGameEditor {
     public boolean migrate(@NotNull CommandSender sender, @NotNull GameArena gameArena) {
         Optional.ofNullable(gameArena.getFeature(SimpleBoundingFeature.class)).ifPresent(boundingFeatureEditor::migrate);
         Optional.ofNullable(gameArena.getFeature(SimpleMaterialProbabilityFeature.class)).ifPresent(materialProbabilityFeatureEditor::migrate);
+        Optional.ofNullable(gameArena.getFeature(ListenerFeature.class)).ifPresent(listenerFeature -> dropItemOnBreak = listenerFeature.isDropItemOnBreak());
         return super.migrate(sender, gameArena);
     }
 }

@@ -5,6 +5,7 @@ import com.cryptomorin.xseries.XTag;
 import me.hsgamer.gamesinthebox.blockrush.BlockRush;
 import me.hsgamer.gamesinthebox.blockrush.BlockRushArenaLogic;
 import me.hsgamer.gamesinthebox.game.feature.BoundingFeature;
+import me.hsgamer.gamesinthebox.game.feature.GameConfigFeature;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameArena;
 import me.hsgamer.gamesinthebox.game.simple.feature.SimplePointFeature;
 import me.hsgamer.gamesinthebox.util.EntityUtil;
@@ -24,10 +25,13 @@ import org.bukkit.event.block.BlockMultiPlaceEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
+import java.util.Optional;
+
 public class ListenerFeature implements Feature, Listener {
     private final BlockRush expansion;
     private final SimpleGameArena arena;
     private final BlockRushArenaLogic logic;
+    private boolean dropItemOnBreak = false;
 
     public ListenerFeature(BlockRush expansion, SimpleGameArena arena, BlockRushArenaLogic logic) {
         this.expansion = expansion;
@@ -51,6 +55,21 @@ public class ListenerFeature implements Feature, Listener {
         HandlerList.unregisterAll(this);
     }
 
+    public boolean isDropItemOnBreak() {
+        return dropItemOnBreak;
+    }
+
+    @Override
+    public void postInit() {
+        GameConfigFeature gameConfigFeature = arena.getFeature(GameConfigFeature.class);
+
+        if (gameConfigFeature != null) {
+            dropItemOnBreak = Optional.ofNullable(gameConfigFeature.getString("drop-item-on-break"))
+                    .map(Boolean::parseBoolean)
+                    .orElse(false);
+        }
+    }
+
     @Override
     public void clear() {
         unregister();
@@ -64,6 +83,10 @@ public class ListenerFeature implements Feature, Listener {
         if (!getBoundingFeature().checkBounding(location, true))
             return;
         if (logic.isInGame()) {
+            if (!dropItemOnBreak) {
+                event.setDropItems(false);
+                event.setExpToDrop(0);
+            }
             getPointFeature().applyPoint(event.getPlayer().getUniqueId(), BlockRush.POINT_BLOCK);
         } else {
             event.setCancelled(true);

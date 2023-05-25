@@ -1,7 +1,7 @@
 package me.hsgamer.gamesinthebox.blockrush;
 
-import me.hsgamer.gamesinthebox.blockrush.feature.ListenerFeature;
 import me.hsgamer.gamesinthebox.blockrush.feature.BlockPlaceFeature;
+import me.hsgamer.gamesinthebox.blockrush.feature.ListenerFeature;
 import me.hsgamer.gamesinthebox.game.feature.PointFeature;
 import me.hsgamer.gamesinthebox.game.simple.feature.SimpleBoundingFeature;
 import me.hsgamer.gamesinthebox.game.simple.feature.SimpleMaterialProbabilityFeature;
