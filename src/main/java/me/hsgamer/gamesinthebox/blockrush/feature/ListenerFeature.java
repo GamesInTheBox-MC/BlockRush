@@ -1,5 +1,6 @@
 package me.hsgamer.gamesinthebox.blockrush.feature;
 
+import com.cryptomorin.xseries.XBlock;
 import com.cryptomorin.xseries.XMaterial;
 import com.cryptomorin.xseries.XTag;
 import me.hsgamer.gamesinthebox.blockrush.BlockRush;
@@ -25,7 +26,9 @@ import org.bukkit.event.block.BlockMultiPlaceEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
+import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class ListenerFeature implements Feature, Listener {
     private final BlockRush expansion;
@@ -113,10 +116,8 @@ public class ListenerFeature implements Feature, Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockExplode(BlockExplodeEvent event) {
-        if (!logic.isInGame()) {
-            BoundingFeature boundingFeature = getBoundingFeature();
-            event.blockList().removeIf(block -> boundingFeature.checkBounding(block.getLocation(), true));
-        }
+        BoundingFeature boundingFeature = getBoundingFeature();
+        event.blockList().removeIf(block -> boundingFeature.checkBounding(block.getLocation(), true));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -130,7 +131,14 @@ public class ListenerFeature implements Feature, Listener {
         if (entity.getWorld() != boundingFeature.getWorld())
             return;
         Entity source = EntityUtil.getTntSource(entity);
-        int count = (int) event.blockList().stream().filter(block -> !XTag.AIR.isTagged(XMaterial.matchXMaterial(block.getType())) && boundingFeature.checkBounding(block.getLocation(), true)).count();
+        Collection<Block> blocks = event.blockList().stream().filter(block -> !XTag.AIR.isTagged(XMaterial.matchXMaterial(block.getType())) && boundingFeature.checkBounding(block.getLocation(), true)).collect(Collectors.toList());
+        int count = blocks.size();
+        if (!dropItemOnBreak) {
+            event.blockList().removeAll(blocks);
+            for (Block block : blocks) {
+                XBlock.setType(block, XMaterial.AIR);
+            }
+        }
         if (count > 0 && source instanceof org.bukkit.entity.Player)
             getPointFeature().applyPoint(source.getUniqueId(), BlockRush.POINT_BLOCK, point -> point * count);
     }
