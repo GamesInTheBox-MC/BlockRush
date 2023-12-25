@@ -2,7 +2,7 @@ package me.hsgamer.gamesinthebox.blockrush;
 
 import me.hsgamer.gamesinthebox.blockrush.feature.ListenerFeature;
 import me.hsgamer.gamesinthebox.game.GameArena;
-import me.hsgamer.gamesinthebox.game.simple.action.ValueAction;
+import me.hsgamer.gamesinthebox.game.simple.action.BooleanAction;
 import me.hsgamer.gamesinthebox.game.simple.feature.SimpleBoundingFeature;
 import me.hsgamer.gamesinthebox.game.simple.feature.SimpleMaterialProbabilityFeature;
 import me.hsgamer.gamesinthebox.game.template.TemplateGame;
@@ -11,7 +11,10 @@ import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class BlockRushEditor extends TemplateGameEditor {
     private final SimpleBoundingFeature.Editor boundingFeatureEditor = SimpleBoundingFeature.editor(true);
@@ -27,36 +30,15 @@ public class BlockRushEditor extends TemplateGameEditor {
         Map<String, SimpleAction> map = super.createActionMap();
         map.putAll(boundingFeatureEditor.getActions());
         map.putAll(materialProbabilityFeatureEditor.getActions());
-        map.put("drop-item-on-break", new ValueAction<Boolean>() {
+        map.put("drop-item-on-break", new BooleanAction() {
             @Override
             protected boolean performAction(@NotNull CommandSender sender, @NotNull Boolean value, String... args) {
                 dropItemOnBreak = value;
                 return true;
             }
-
-            @Override
-            protected int getValueArgCount() {
-                return 1;
-            }
-
-            @Override
-            protected Optional<Boolean> parseValue(@NotNull CommandSender sender, String... args) {
-                return Optional.of(Boolean.parseBoolean(args[0]));
-            }
-
-            @Override
-            protected @NotNull List<String> getValueArgs(@NotNull CommandSender sender, String... args) {
-                return Arrays.asList("true", "false");
-            }
-
             @Override
             public @NotNull String getDescription() {
                 return "Set whether to drop items when breaking blocks";
-            }
-
-            @Override
-            public @NotNull String getArgsUsage() {
-                return "<true/false>";
             }
         });
         return map;
