@@ -36,6 +36,7 @@ public class BlockRushEditor extends TemplateGameEditor {
                 dropItemOnBreak = value;
                 return true;
             }
+
             @Override
             public @NotNull String getDescription() {
                 return "Set whether to drop items when breaking blocks";

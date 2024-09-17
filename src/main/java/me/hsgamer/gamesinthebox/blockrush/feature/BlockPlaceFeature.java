@@ -1,6 +1,6 @@
 package me.hsgamer.gamesinthebox.blockrush.feature;
 
-import me.hsgamer.blockutil.abstraction.BlockProcess;
+import io.github.projectunified.blockutil.api.BlockProcess;
 import me.hsgamer.gamesinthebox.game.feature.BoundingFeature;
 import me.hsgamer.gamesinthebox.game.feature.MaterialProbabilityFeature;
 import me.hsgamer.gamesinthebox.game.simple.SimpleGameArena;
@@ -34,7 +34,7 @@ public class BlockPlaceFeature implements Feature {
         MaterialProbabilityFeature materialProbabilityFeature = arena.getFeature(MaterialProbabilityFeature.class);
         World world = boundingFeature.getWorld();
         BlockBox blockBox = boundingFeature.getBlockBox();
-        BlockProcess blockProcess = BlockHandlerUtil.getBlockHandler().setRandomBlocks(world, blockBox, materialProbabilityFeature.getMaterialCollection());
+        BlockProcess blockProcess = BlockHandlerUtil.getBlockHandler().setBlock(world, blockBox, materialProbabilityFeature.getBlockDataCollection(), false);
         currentTask.set(blockProcess);
         hasBlock.set(true);
     }
@@ -44,7 +44,7 @@ public class BlockPlaceFeature implements Feature {
         BoundingFeature boundingFeature = arena.getFeature(BoundingFeature.class);
         World world = boundingFeature.getWorld();
         BlockBox blockBox = boundingFeature.getBlockBox();
-        BlockProcess blockProcess = BlockHandlerUtil.getBlockHandler().clearBlocks(world, blockBox);
+        BlockProcess blockProcess = BlockHandlerUtil.getBlockHandler().clearBlock(world, blockBox, false);
         currentTask.set(blockProcess);
         hasBlock.set(false);
     }
@@ -62,7 +62,7 @@ public class BlockPlaceFeature implements Feature {
             BoundingFeature boundingFeature = arena.getFeature(BoundingFeature.class);
             World world = boundingFeature.getWorld();
             BlockBox blockBox = boundingFeature.getBlockBox();
-            BlockHandlerUtil.getBlockHandler().clearBlocksFast(world, blockBox);
+            BlockHandlerUtil.getBlockHandler().clearBlock(world, blockBox, true);
         }
     }
 
